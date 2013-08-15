@@ -1,11 +1,11 @@
 curl -c /tmp/clt/cookie -d"username=gabi&password=11" http://cl.kazav.net/account/Plogin/
+curl -c /tmp/clt/cookie_new -d"username=gabi1&email=11@2111.com&password1=11&password2=11&firstname=gabi&lastname=kazav" http://cl.kazav.net/account/Pnew/
 
 ------------------------
 curl -b /tmp/cookie -d "parent=1" http://ws.kazav.net/oos/get_child/
 curl -b /tmp/cookie -d "cat=1" http://ws.kazav.net/oos/get_keys/
 curl -b /tmp/cookie -d "user_id=" http://ws.kazav.net/oos/get_user/
 curl -b /tmp/cookie -d "work_id=1" http://ws.kazav.net/oos/get_work/
-curl -c /tmp/cookie_new -d"username=gabi3&email=11@2111.com&password1=11111&password2=11111&phone_num1=765432&phone_num2=&address=hahahaddress&birthday=&area_id=1&firstname=gabi&lastname=kazav" http://ws.kazav.net/account/Pnew/
 curl -b /tmp/cookie -d "area=1&item=21&text=just text&end_date=15/03/2013" http://ws.kazav.net/oos/post_work/
 curl -b /tmp/cookie_prov -d "work_id=4&text=haha text&price=5000" http://ws.kazav.net/oos/post_price/
 curl -c /tmp/cookie_prov -d"username=prov2&email=11@23111.com&password1=11111&password2=11111&phone_num1=765432&phone_num2=&address=hahahaddress&birthday=&area_id=1&firstname=gabi&lastname=kazav" http://ws.kazav.net/account/Pnew_prov/

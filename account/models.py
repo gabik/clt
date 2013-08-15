@@ -12,7 +12,6 @@ class status(models.Model):
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique=True)
-	phone_num1 = models.CharField(max_length=30)
 	hash = models.CharField(max_length=100, blank=True, null=True)
 
 	def __unicode__(self):
