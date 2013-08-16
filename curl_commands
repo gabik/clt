@@ -1,5 +1,8 @@
 curl -c /tmp/clt/cookie -d"username=gabi&password=11" http://cl.kazav.net/account/Plogin/
-curl -c /tmp/clt/cookie_new -d"username=gabi1&email=11@2111.com&password1=11&password2=11&firstname=gabi&lastname=kazav" http://cl.kazav.net/account/Pnew/
+curl -c /tmp/clt/cookie_new -d"username=972527772457&email=111@2111.com&password1=111111&password2=111111&firstname=gabi&lastname=kazav" http://cl.kazav.net/account/Pnew/
+curl -c /tmp/clt/cookie_new -d"hash=6657791" http://cl.kazav.net/account/accept_user/7/
+
+SMS: curl -X POST 'https://api.twilio.com/2010-04-01/Accounts/AC442a538b44777e2897d4edff57437a24/SMS/Messages.xml' -d 'From=%2B16698005705' -d 'To=%2B972527772457' -d 'Body=Hi%2C+Test+message' -u AC442a538b44777e2897d4edff57437a24:be3a4e5fbf058c5b27a2904efd05d726
 
 ------------------------
 curl -b /tmp/cookie -d "parent=1" http://ws.kazav.net/oos/get_child/
