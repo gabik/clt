@@ -19,6 +19,7 @@ urlpatterns = patterns('account.views',
 	#(r'^resetaccept/(?P<UserId>\d+)/(?P<UserHash>\w+)/$', 'reset_pass_link'),
 	#(r'^reset_pass_do/$', 'reset_pass_do'),
 	(r'^accept_user/(?P<UserId>\d+)/$', 'accept_user'),
+	(r'^resend_pin/$', 'pin_again'),
 	#(r'^reject_prov/(?P<UserId>\d+)/(?P<UserHash>\w+)/$', 'reject_prov'),
 	#(r'^unsubscribe/(?P<guestHash>\w+)/$', 'unsubscribe'),
 )

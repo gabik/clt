@@ -98,3 +98,22 @@ def accept_user(request, UserId):
 	json_dump = serializers.serialize("json", list(json_data))
 	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
 
+def pin_again(request):
+	json_data=status.objects.filter(status='ERR',MSG='PD')
+	if request.method == 'POST':
+		cur_user = User.objects.filter(username=request.POST['username'])
+		if cur_user:
+			cur_profile = UserProfile.objects.filter(user=cur_user[0])
+			if cur_profile:
+				cur_hash = cur_profile[0].hash
+				if cur_hash == "OK":
+					json_data=status.objects.filter(status='WRN',MSG='ACV')
+				else:
+					textmessage="Hi " + cur_user[0].first_name + " and welcome to CLT. This is your PIN code for activating your account: " + cur_hash
+					account_sid = "AC442a538b44777e2897d4edff57437a24"
+					auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
+					client = TwilioRestClient(account_sid, auth_token)
+					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
+					json_data = status.objects.filter(status='OK')
+	json_dump = serializers.serialize("json", list(json_data))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
