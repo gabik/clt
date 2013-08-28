@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 #from account.forms import 
 from django.contrib.auth.decorators import login_required
+from random import randint
 from django.template import RequestContext
 from django.utils import simplejson as json
 from account.models import status, UserProfile
@@ -15,9 +16,9 @@ import hashlib
 from twilio.rest import TwilioRestClient
 
 def Plogin (request):
-	json_data=list(status.objects.filter(status='ERR',MSG='NE'))
+	json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	if request.method == 'POST':
-		json_data=list(status.objects.filter(status='ERR',MSG='NE'))
+		json_data=list(status.objects.filter(status='WRN',MSG='NE'))
 		new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
 		if new_user :
 			json_data = status.objects.filter(status='OK')
@@ -43,7 +44,7 @@ def PNewUser(request):
 			created_user.is_active = False
 			created_user.save()
 			pinHash = str(hash("CLT"+ created_user.username + created_user.email))[3:9]
-			userprofile = UserProfile(user=created_user, hash=pinHash) #hash=hashlib.sha224("CLT" + created_user.username + created_user.email).hexdigest())
+			userprofile = UserProfile(user=created_user, hash=pinHash, pwdhash=0) #hash=hashlib.sha224("CLT" + created_user.username + created_user.email).hexdigest())
 			#userprofile.user = created_user
 			#userprofile.phone_num1 = userprofile_form.cleaned_data['phone_num1']
 			#userprofile.hash = hashlib.sha224("CLT" + created_user.username + created_user.email).hexdigest()
@@ -60,7 +61,7 @@ def PNewUser(request):
 			account_sid = "AC442a538b44777e2897d4edff57437a24"
 			auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
 			client = TwilioRestClient(account_sid, auth_token)
-			message = client.sms.messages.create(body=textmessage,to="+"+created_user.username,from_="+16698005705")
+		#	message = client.sms.messages.create(body=textmessage,to="+"+created_user.username,from_="+16698005705")
 			#new_user = authenticate(username=request.POST['username'], password=request.POST['password1'])
 			#login(request, new_user)
 			json_data = status.objects.filter(status='OK')
@@ -117,3 +118,35 @@ def pin_again(request):
 					json_data = status.objects.filter(status='OK')
 	json_dump = serializers.serialize("json", list(json_data))
 	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
+
+def reset_P_password(request):
+	json_data=status.objects.filter(status='ERR',MSG='PD')
+	json_dump = serializers.serialize("json", list(json_data))
+	if request.method == 'POST':
+		if 'username' in request.POST:
+			cur_user = User.objects.filter(username=request.POST['username'])
+		else:
+			return HttpResponse(json_dump)
+		if cur_user:
+			cur_profile = UserProfile.objects.filter(user=cur_user[0])
+			if cur_profile:
+				if (cur_profile[0].pwdhash == '0'):
+					cur_profile[0].pwdhash = randint(1000, 9999) 
+					cur_profile[0].save()
+					textmessage="Hi " + cur_user[0].first_name + ", The PIN to reset your password is: " + str(cur_profile[0].pwdhash)
+					account_sid = "AC442a538b44777e2897d4edff57437a24"
+					auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
+					client = TwilioRestClient(account_sid, auth_token)
+					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
+				else:
+					if 'again' in request.POST:
+						if request.POST['again'] == "1":
+							textmessage="Hi " + cur_user[0].first_name + ", The PIN to reset your password is: " + str(cur_profile[0].pwdhash)
+							account_sid = "AC442a538b44777e2897d4edff57437a24"
+							auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
+							client = TwilioRestClient(account_sid, auth_token)
+							message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
+				json_data = status.objects.filter(status='OK')
+				json_dump = serializers.serialize("json", list(json_data))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
+

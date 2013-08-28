@@ -13,6 +13,7 @@ class status(models.Model):
 class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique=True)
 	hash = models.CharField(max_length=100, blank=True, null=True)
+	pwdhash = models.CharField(max_length=100, blank=True, null=True)
 
 	def __unicode__(self):
 		return self.user.username
