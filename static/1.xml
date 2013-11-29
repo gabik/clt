@@ -1,0 +1,57 @@
+<contactRoot>
+	<Group>
+		<Name>Ohad's friends</Name>
+		<Owner>0527772457</Owner>
+	</Group>
+	<Contacts>
+		<Contact>
+			<Name>Maor Debi</Name>
+			<Email>maor_debi@hotmail.com</Email>
+			<Phones>
+				<Phone>
+					<Number>059876543</Number>
+					<Type>Mobile</Type>
+				</Phone>
+				<Phone>
+					<Number>0576543</Number>
+					<Type>Mobile</Type>
+				</Phone>
+				<Phone>
+					<Number>05923543</Number>
+					<Type>Home</Type>
+				</Phone>
+				<Phone>
+					<Number>0565743</Number>
+					<Type>Work</Type>
+				</Phone>
+				<Phone>
+					<Number>05346576543</Number>
+					<Type>Fax</Type>
+				</Phone>
+			</Phones>
+		</Contact>
+		<Contact>
+			<Name>Ohad Kazav</Name>
+			<Email>Ohad@hotmail.com</Email>
+			<Phones>
+				<Phone>
+					<Number>059826543</Number>
+					<Type>Mobile</Type>
+				</Phone>
+				<Phone>
+					<Number>059423543</Number>
+					<Type>Home</Type>
+				</Phone>
+				<Phone>
+					<Number>04565743</Number>
+					<Type>Work</Type>
+				</Phone>
+				<Phone>
+					<Number>053476543</Number>
+					<Type>Fax</Type>
+				</Phone>
+			</Phones>
+		</Contact>
+	</Contacts>
+</contactRoot>
+
