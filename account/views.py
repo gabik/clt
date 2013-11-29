@@ -150,3 +150,28 @@ def reset_P_password(request):
 				json_dump = serializers.serialize("json", list(json_data))
 	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
 
+def reset_P_password_change(request):
+	json_data=status.objects.filter(status='ERR',MSG='PD')
+	json_dump = serializers.serialize("json", list(json_data))
+	if request.method == 'POST':
+		if ('username' in request.POST) and ('new_pass' in request.POST) and ('pin' in request.POST):
+			cur_user = User.objects.filter(username=request.POST['username'])
+		else:
+			return HttpResponse(json_dump)
+		if cur_user:
+			cur_profile = UserProfile.objects.filter(user=cur_user[0])
+			if cur_profile:
+				if (cur_profile[0].pwdhash != '0'):
+					cur_user[0].set_password(request.POST['new_pass'])
+					cur_user[0].save()
+					cur_profile[0].pwdhash = 0
+					cur_profile[0].save()
+					textmessage="Hi " + cur_user[0].first_name + ", your password to the application changed to : " + request.POST['new_pass']
+					account_sid = "AC442a538b44777e2897d4edff57437a24"
+					auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
+					client = TwilioRestClient(account_sid, auth_token)
+					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
+					json_data = status.objects.filter(status='OK')
+					json_dump = serializers.serialize("json", list(json_data))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
+
