@@ -15,10 +15,6 @@ from account.models import status
 from clt.forms import xml_form
 import xml.etree.ElementTree as ET
 
-def create_new_group(request):
-	xml1=request.POST
-	return HttpResponse(xml1)
-
 def handle_uploaded_file(file_path, user_id):
 	dest = open(settings.MEDIA_ROOT + "/contacts_xml/" + str(user_id),"wb")
 	for chunk in file_path.chunks():
@@ -40,9 +36,16 @@ def post_xml(request):
 			#xml_clean = new_xml.cleaned_data
 			cur_xml = new_xml.save(commit=False)
 			cur_xml.user = request.user
-			cur_xml.xml_file = "contacts_xml/" + str(request.user.id)
+			cur_xml.xml_file = settings.MEDIA_ROOT + "contacts_xml/" + str(request.user.id)
 			cur_xml.save()
-			json_data = status.objects.filter(status='OK')
+			new_group=create_new_group(request)
+			if new_group:
+				if new_group != 0:
+					json_data = status.objects.filter(status='OK')
+				else:
+					json_data = status.objects.filter(status='ERR',MSG='PD')
+			else:
+				json_data = status.objects.filter(status='ERR',MSG='PD')
       #  else:
       #    json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 		else:
@@ -56,6 +59,15 @@ def post_xml(request):
 	json_dump += errors
 	return HttpResponse(json_dump)
 
+
+def create_new_group(request):
+	uid=request.user.id
+	path = settings.MEDIA_ROOT + "/contacts_xml/" + str(uid)
+	tree = ET.parse(path)
+	root=tree.getroot()
+	#gname=root.find("Group").find("Name").text
+	#gowner=root.find("Group").find("Owner").text
+	return 1 #new_group.id;
 
 # XML PARSE:
 # path = "/home/gabi/clt/static/1.xml"

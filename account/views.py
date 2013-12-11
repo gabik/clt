@@ -61,7 +61,7 @@ def PNewUser(request):
 			account_sid = "AC442a538b44777e2897d4edff57437a24"
 			auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
 			client = TwilioRestClient(account_sid, auth_token)
-		#	message = client.sms.messages.create(body=textmessage,to="+"+created_user.username,from_="+16698005705")
+			#DEL COMMENT TO ENABLE SMS			message = client.sms.messages.create(body=textmessage,to="+"+created_user.username,from_="+16698005705")
 			#new_user = authenticate(username=request.POST['username'], password=request.POST['password1'])
 			#login(request, new_user)
 			json_data = status.objects.filter(status='OK')
@@ -114,7 +114,7 @@ def pin_again(request):
 					account_sid = "AC442a538b44777e2897d4edff57437a24"
 					auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
 					client = TwilioRestClient(account_sid, auth_token)
-					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
+					#DEL COMMENT TO ENABLE SMS					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
 					json_data = status.objects.filter(status='OK')
 	json_dump = serializers.serialize("json", list(json_data))
 	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
@@ -137,15 +137,15 @@ def reset_P_password(request):
 					account_sid = "AC442a538b44777e2897d4edff57437a24"
 					auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
 					client = TwilioRestClient(account_sid, auth_token)
-					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
+					#DEL COMMENT TO ENABLE SMS					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
 				else:
-					if 'again' in request.POST:
-						if request.POST['again'] == "1":
-							textmessage="Hi " + cur_user[0].first_name + ", The PIN to reset your password is: " + str(cur_profile[0].pwdhash)
-							account_sid = "AC442a538b44777e2897d4edff57437a24"
-							auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
-							client = TwilioRestClient(account_sid, auth_token)
-							message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
+					#if 'again' in request.POST:
+						#if request.POST['again'] == "1":
+					textmessage="Hi " + cur_user[0].first_name + ", The PIN to reset your password is: " + str(cur_profile[0].pwdhash)
+					account_sid = "AC442a538b44777e2897d4edff57437a24"
+					auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
+					client = TwilioRestClient(account_sid, auth_token)
+					#DEL COMMENT TO ENABLE SMS					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
 				json_data = status.objects.filter(status='OK')
 				json_dump = serializers.serialize("json", list(json_data))
 	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
@@ -161,7 +161,7 @@ def reset_P_password_change(request):
 		if cur_user:
 			cur_profile = UserProfile.objects.filter(user=cur_user[0])
 			if cur_profile:
-				if (cur_profile[0].pwdhash != '0'):
+				if (cur_profile[0].pwdhash != request.POST['pin']):
 					cur_user[0].set_password(request.POST['new_pass'])
 					cur_user[0].save()
 					cur_profile[0].pwdhash = 0
@@ -170,8 +170,11 @@ def reset_P_password_change(request):
 					account_sid = "AC442a538b44777e2897d4edff57437a24"
 					auth_token  = "be3a4e5fbf058c5b27a2904efd05d726"
 					client = TwilioRestClient(account_sid, auth_token)
-					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
+					#DEL COMMENT TO ENABLE SMS					message = client.sms.messages.create(body=textmessage,to="+"+cur_user[0].username,from_="+16698005705")
 					json_data = status.objects.filter(status='OK')
+					json_dump = serializers.serialize("json", list(json_data))
+				else:
+					json_data=status.objects.filter(status='ERR',MSG='NE')
 					json_dump = serializers.serialize("json", list(json_data))
 	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
 
