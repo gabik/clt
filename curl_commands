@@ -8,7 +8,7 @@ curl -d"username=972527772457&again=0" http://cl.kazav.net/account/password/
 curl -d"username=972527772457&again=1" http://cl.kazav.net/account/password/
 curl -d"username=972527772457&new_pass=123$pin=2757" http://cl.kazav.net/account/password_final/
 #curl -b /tmp/clt/cookie -F "work_id=18" -F "pic=@/usr/share/cups/www/images/smiley.jpg;type=image/jpg" http://ws.kazav.net/oos/post_pic/
-curl -b /tmp/clt/cookie -F "xml_file=@/tmp/test.xml;type=image/jpg" http://cl.kazav.net/cl/upload_xml/
+curl -b /tmp/clt/cookie -F "xml_file=@/tmp/xml;type=image/jpg" http://cl.kazav.net/cl/upload_xml/
 
 
 SMS: curl -X POST 'https://api.twilio.com/2010-04-01/Accounts/AC442a538b44777e2897d4edff57437a24/SMS/Messages.xml' -d 'From=%2B16698005705' -d 'To=%2B972527772457' -d 'Body=Hi%2C+Test+message' -u AC442a538b44777e2897d4edff57437a24:be3a4e5fbf058c5b27a2904efd05d726

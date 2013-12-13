@@ -13,7 +13,13 @@ from django.core import serializers
 from clt import settings
 from account.models import status
 from clt.forms import xml_form
+from clt.models import contact_group
 import xml.etree.ElementTree as ET
+
+class contact:
+	def __init__(self, type=None, phone=None):
+		self.type=type
+		self.phone=phone
 
 def handle_uploaded_file(file_path, user_id):
 	dest = open(settings.MEDIA_ROOT + "/contacts_xml/" + str(user_id),"wb")
@@ -65,8 +71,16 @@ def create_new_group(request):
 	path = settings.MEDIA_ROOT + "/contacts_xml/" + str(uid)
 	tree = ET.parse(path)
 	root=tree.getroot()
-	#gname=root.find("Group").find("Name").text
-	#gowner=root.find("Group").find("Owner").text
+	gname=root.find("group").find("name").text
+	gowner=User.objects.filter(username=root.find("group").find("owner").text)
+	cur_ct_group = contact_group(name=gname, owner=gowner[0])
+	cur_ct_group.save()
+	#for i in root.find("contacts"):
+	#	i.find("name").text
+	#	i.find("email").text
+		#for j in i.find("phones"):
+		#	j.find("number").text
+		#	j.find("type").text
 	return 1 #new_group.id;
 
 # XML PARSE:
