@@ -13,7 +13,7 @@ from django.core import serializers
 from clt import settings
 from account.models import status
 from clt.forms import xml_form
-from clt.models import contact_group
+from clt.models import contact_group, contact_element, contact_phones, group_members
 import xml.etree.ElementTree as ET
 
 class contact:
@@ -75,29 +75,10 @@ def create_new_group(request):
 	gowner=User.objects.filter(username=root.find("group").find("owner").text)
 	cur_ct_group = contact_group(name=gname, owner=gowner[0])
 	cur_ct_group.save()
-	#for i in root.find("contacts"):
-	#	i.find("name").text
-	#	i.find("email").text
-		#for j in i.find("phones"):
-		#	j.find("number").text
-		#	j.find("type").text
-	return 1 #new_group.id;
-
-# XML PARSE:
-# path = "/home/gabi/clt/static/1.xml"
-# tree = ET.parse(path)
-# root=tree.getroot()
-# ## Adding the group and getting its ID key
-# gname=root.find("Group").find("Name").text
-# gowner=root.find("Group").find("Owner").text
-# ## Adding contacts to the group
-# for i in root.find("Contacts"):
- # i.find("Name").text
- # i.find("Email").text
- # ## save it
- # ## adding phones to phones list
- # for j in i.find("Phones"):
-  # j.find("Number").text
-  # j.find("Type").text
-  # ## save the phone on the model with the contact key
-
+	for i in root.find("contacts"):
+		cur_contact_element = contact_element(name=i.find("name").text, email=i.find("email").text, group=cur_ct_group)
+		cur_contact_element.save()
+		for j in i.find("phones"):
+			cur_contact_phones = contact_phones(contact=cur_contact_element, phone=j.find("number").text, type=j.find("type").text)
+			cur_contact_phones.save()
+	return cur_ct_group.id;
